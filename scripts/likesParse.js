@@ -1,7 +1,7 @@
 var request = require('request');
 var Promise = require('promise');
 
-var config = require('../crawler/config.js');
+var config = require('../config.js');
 var pattern = config.paterns.likes;
 
 module.exports = function (url) {

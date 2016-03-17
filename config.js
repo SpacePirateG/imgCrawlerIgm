@@ -3,17 +3,24 @@ module.exports = {
     likes: /"likes":\{"count":(\d+)/g,
     userId: /com\/(\w+)\//g
   },
-  
+  //useCss: false,
+
   xPathSelectors: {
-    content : '//div/div/div/a[count(*)=1]',
-    image : '//article/div/div/img | //article/div/div/div/img',
-    closeContent : '//div/div/button',
-    more : '//main/article/div/div/a',
-    scrollTarget : '//@[class=".ResponsiveBlock"]'
+    name: '//div/div/h1',
+    content: '//a[@class = "_8mlbc _t5r8b" and not(div[@class = "_1lp5e"])]',
+    loading: '//article/div/div/a'
+  },
+  cssSelectors: {
+    nextContent: '.coreSpriteRightPaginationArrow',
+    scrollTarget : '.ResponsiveBlock',
+    image: '._e0mru ._icyx7,._rudo5 ._icyx7',
+    video: '._c8hkj',
   },
 
   scrollStep: 200,
   scrollTimeout: 50,
   waitElementTimeout: 10000,
-  waitScriptTimeout: 10000
+  waitScriptTimeout: 10000,
+  sourceUrl: '',
+  countContent: 2000
 };
