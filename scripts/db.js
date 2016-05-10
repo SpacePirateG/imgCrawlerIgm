@@ -1,32 +1,38 @@
 var config = require('../config.js');
 var Promise = require('promise');
+var EventEmiter = require('events');
+var _=require('lodash');
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/work');
 
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+var Profile = require('../model/profile.js');
+var Image = require('../model/image.js');
 
-var Pages = new Schema({
-    page: 'String',
-    images: [
-        {
-            link: 'String',
-            likes: 'String'
-        }
-    ]
+var states = config.profileStates;
+
+
+const dbEmmiter = new EventEmiter();
+dbEmmiter.on('save data list', function(dataList){
+    _.each(dataList, function(image){
+        image.save(function(err){
+            if(err)
+                console.log(err);
+        });
+    });
 });
 
-mongoose.model('Page', Pages);
+module.exports.emitter = dbEmmiter;
 
-module.exports.nextPage = function() {
+module.exports.nextProfile = function() {
     return new Promise(function (resolve, reject) {
-        var pageModel = mongoose.model('Page');
-        pageModel.findOne({images: {$exists: true, $eq: []}}, function (err, page) {
+        Profile.findOneAndUpdate({state: {$exists: true, $eq: states.free}}, {state: states.lock}, function (err, profile) {
             if (err)
             {
                 reject(err);
                 return;
             }
 
-            resolve(page);
+            resolve(profile);
         })
     })
 };
