@@ -15,6 +15,13 @@ module.exports = {
         image: '._e0mru ._icyx7,._rudo5 ._icyx7',
         video: '._c8hkj'
     },
+    scrollStep: 200,
+    scrollTimeout: 50,
+    waitElementTimeout: 10000,
+    waitScriptTimeout: 10000,
+    sourceUrl: '',
+    countContent: 1000,
+
     profileStates: {
         free: 'FREE',
         lock: 'LOCK',
@@ -33,10 +40,6 @@ module.exports = {
             type: 'STRING'
         }
     },
-    scrollStep: 200,
-    scrollTimeout: 50,
-    waitElementTimeout: 10000,
-    waitScriptTimeout: 10000,
-    sourceUrl: '',
-    countContent: 1000
+
+    hostDB: 'mongodb://localhost/work'
 };
