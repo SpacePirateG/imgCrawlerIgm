@@ -2,7 +2,6 @@ var request = require('request');
 var Promise = require('promise');
 
 module.exports.load = function(url){
-    console.log(url);
     var buffer = new Buffer('');
     return new Promise(function(resolve, reject){
        request

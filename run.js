@@ -3,6 +3,8 @@ var crawler = require('./scripts/crawler.js');
 var db = require('./scripts/db.js');
 var config = require('./config.js');
 var mongoose = require('mongoose');
+var async = require('asyncawait/async');
+var await = require('asyncawait/await');
 
 var pathToQuickjava = __dirname + '/extensions/quickjava-2.0.7-fx.xpi';
 
@@ -17,16 +19,27 @@ driver.manage().timeouts().setScriptTimeout(config.waitScriptTimeout);
 driver.manage().window().setSize(800, 800);
 
 
-db.nextProfile().then(function(profile){
-    crawler.grabPage(driver, profile.url, config.countContent).then(function () {
-        console.log('done');
+var run = async(function(){
+    try {
+        while (true) {
 
-    }, function (err) {
-        console.log('err: ', err);
-    });
-},function(err){
+            try {
+                var profile = await(db.nextProfile());
+                await(crawler.grabPage(driver, profile.url, config.countContent));
+                await(db.profileDone(profile));
+            }
+            catch(err){
+            }
+
+        }
+    }
+    finally{
+        driver.quit();
+    }
 
 });
+
+run();
 
 
 

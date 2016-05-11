@@ -69,9 +69,7 @@ grabImageLinksByXpath = async(function(driver, profile, countContents) {
                 imgLink = await(content.getAttribute('src')).match('.+\.jpg')[0];
 
                 if (countContents - offset == 1) {
-                    console.log('before /last geting');
                     await(getLikesAndAddData(imgLink, contentUrl));
-                    console.log('after last geting');
                 }
                 else
                     getLikesAndAddData(imgLink, contentUrl);
@@ -102,7 +100,6 @@ grabImageLinksByXpath = async(function(driver, profile, countContents) {
 		db.emitter.emit('save data list', imagesList);
         imagesList = [];
         console.log('end of crawling');
-        driver.quit();
         console.timeEnd('grab image links');
 	}
 });
