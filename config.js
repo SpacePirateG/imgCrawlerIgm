@@ -6,10 +6,11 @@ module.exports = {
     //useCss: false,
     xPathSelectors: {
         name: '//div/div/h1',
-        content: '//a[@class = "_8mlbc _t5r8b" and not(div[@class = "_1lp5e"])]',
+        //content: '//a[@class = "_8mlbc" and not(div[@class = "_1lp5e"])]',
         loading: '//article/div/div/a'
     },
     cssSelectors: {
+		content: '._8mlbc',
         nextContent: '.coreSpriteRightPaginationArrow',
         scrollTarget: '.ResponsiveBlock',
         image: '._e0mru ._icyx7,._rudo5 ._icyx7',

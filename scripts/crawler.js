@@ -114,7 +114,7 @@ module.exports.grabPage = async(function (driver, url, countContents) {
         console.time('grab image links');
         driver.get(url);
 
-        await(driver.wait(until.elementLocated((By.xpath('(' + config.xPathSelectors.content + ')[' + 1 + ']'))), config.waitElementTimeout));
-        await(driver.findElement((By.xpath('(' + config.xPathSelectors.content + ')[' + 1 + ']'))).click());
+        await(driver.wait(until.elementLocated(By.css(config.cssSelectors.content)), config.waitElementTimeout));
+        await(driver.findElement(By.css(config.cssSelectors.content)).click());
         await(grabImageLinksByXpath(driver, url, countContents));
 });
