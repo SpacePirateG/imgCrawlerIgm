@@ -44,7 +44,7 @@ grabImageLinksByXpath = async(function(driver, profile, countContents) {
 
     var getLikesAndAddData = async(function(imgLink, contentUrl){
         var likes = await(likesParse(contentUrl));
-        var imageData = await(imageLoader.load(imgLink));
+        var imageData = await(imageLoader.loadImage(imgLink));
 
         imagesList.push(
             new Image(getImageObject(imageData, likes, profile))

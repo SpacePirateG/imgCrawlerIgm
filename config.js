@@ -1,6 +1,6 @@
 module.exports = {
     paterns: {
-        likes: /"likes":\{"count":(\d+)/g,
+        likes: /"likes": *\{"count": *(\d+)/g,
         userId: /com\/(\w+)\//g
     },
     //useCss: false,
