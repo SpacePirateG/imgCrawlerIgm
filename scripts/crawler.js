@@ -35,7 +35,7 @@ function getImageObject(imageData, likes, profile){
     };
 }
 
-grabImageLinksByXpath = async(function(driver, profile, countContents) {
+grabInfo = async(function(driver, profile, needCount) {
     var content;
     var contentUrl;
     var imgLink;
@@ -50,7 +50,7 @@ grabImageLinksByXpath = async(function(driver, profile, countContents) {
             new Image(getImageObject(imageData, likes, profile))
         );
 
-        if(imagesList.length == 10 || offset == countContents - 1)
+        if(imagesList.length == 10 || offset == needCount - 1)
         {
             db.emitter.emit('save data list',  imagesList );
             imagesList = [];
@@ -59,7 +59,7 @@ grabImageLinksByXpath = async(function(driver, profile, countContents) {
 
     config.cssSelectors.imageOrVideo = config.cssSelectors.image + ',' + config.cssSelectors.video;
     try {
-        while (offset < countContents) {
+        while (offset < needCount) {
             await(driver.wait(until.elementLocated(By.css(config.cssSelectors.imageOrVideo)), config.waitElementTimeout));
             try {
                 content = await(driver.findElement(By.css(config.cssSelectors.image)));
@@ -68,7 +68,7 @@ grabImageLinksByXpath = async(function(driver, profile, countContents) {
 
                 imgLink = await(content.getAttribute('src')).match('.+\.jpg')[0];
 
-                if (countContents - offset == 1) {
+                if (needCount - offset == 1) {
                     await(getLikesAndAddData(imgLink, contentUrl));
                 }
                 else
@@ -109,12 +109,12 @@ function errorHandler(err){
     console.log('\n\n[error] :' + err +'\n\n');
 }
 
-module.exports.grabPage = async(function (driver, url, countContents) {
+module.exports.grabPage = async(function (driver, url, needCount) {
 
         console.time('grab image links');
         driver.get(url);
 
         await(driver.wait(until.elementLocated(By.css(config.cssSelectors.content)), config.waitElementTimeout));
         await(driver.findElement(By.css(config.cssSelectors.content)).click());
-        await(grabImageLinksByXpath(driver, url, countContents));
+        await(grabInfo(driver, url, needCount));
 });

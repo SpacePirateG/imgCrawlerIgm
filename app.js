@@ -16,7 +16,7 @@ profile.setPreference("thatoneguydotnet.QuickJava.startupStatus.Images", 2);
 var options = new firefox.Options().setProfile(profile);
 var driver = new firefox.Driver(options);
 driver.manage().timeouts().setScriptTimeout(config.waitScriptTimeout);
-driver.manage().window().setSize(800, 800);
+driver.manage().window().setSize(800, 600);
 
 
 var run = async(function(){
