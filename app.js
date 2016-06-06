@@ -19,28 +19,25 @@ driver.manage().timeouts().setScriptTimeout(config.waitScriptTimeout);
 driver.manage().window().setSize(800, 600);
 
 
-var run = async(function(){
-    try {
-        while (true) {
 
-            try {
-                var profile = await(db.nextProfile());
-                await(crawler.grabPage(driver, profile.url, config.countContent));
-                await(db.profileDone(profile));
-            }
-            catch(err){
-            }
-
-        }
+var run = async(function iteration(){
+    var profile = await(db.nextProfile());
+    if(!profile) {
+        setTimeout(async(iteration), 1000);
+        return;
     }
-    finally{
+
+    try {
+        await(crawler.grabPage(driver, profile.url, config.countContent));
+        await(db.profileDone(profile));
+        run();
+    }
+    catch(err){
+        console.log("main [error]: ",err)
         driver.quit();
+        process.exit();
     }
 
 });
 
 run();
-
-
-
-

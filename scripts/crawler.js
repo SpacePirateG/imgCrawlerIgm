@@ -58,50 +58,43 @@ grabInfo = async(function(driver, profile, needCount) {
     });
 
     config.cssSelectors.imageOrVideo = config.cssSelectors.image + ',' + config.cssSelectors.video;
-    try {
-        while (offset < needCount) {
-            await(driver.wait(until.elementLocated(By.css(config.cssSelectors.imageOrVideo)), config.waitElementTimeout));
-            try {
-                content = await(driver.findElement(By.css(config.cssSelectors.image)));
 
-                contentUrl = await(driver.getCurrentUrl()).split('?')[0];
-
-                imgLink = await(content.getAttribute('src')).match('.+\.jpg')[0];
-
-                if (needCount - offset == 1) {
-                    await(getLikesAndAddData(imgLink, contentUrl));
-                }
-                else
-                    getLikesAndAddData(imgLink, contentUrl);
-
-                offset++;
-
+    while (offset < needCount) {
+        await(driver.wait(until.elementLocated(By.css(config.cssSelectors.imageOrVideo)), config.waitElementTimeout));
+        try {
+            content = await(driver.findElement(By.css(config.cssSelectors.image)));
+            contentUrl = await(driver.getCurrentUrl()).split('?')[0];
+            imgLink = await(content.getAttribute('src')).match('.+\.jpg')[0];
+            if (needCount - offset == 1) {
+                await(getLikesAndAddData(imgLink, contentUrl));
             }
-            catch(err){
-                content = await(driver.findElement(By.css(config.cssSelectors.video)));
-            }
-            try{
-                await(driver.findElement(By.css(config.cssSelectors.nextContent)).click());
-            }
-            catch(err){
-                console.log(err);
-                break;
-            }
-            await(driver.wait(until.stalenessOf(content)), config.waitElementTimeout);
-
+            else
+                getLikesAndAddData(imgLink, contentUrl);
+            offset++;
+        }
+        catch(err){
+            content = await(driver.findElement(By.css(config.cssSelectors.video)));
         }
 
-    }
-    catch(err) {
-        errorHandler(err);
+        try{
+            await(driver.findElement(By.css(config.cssSelectors.nextContent)).click());
+        }
+        catch(err){
+            if(err.name == 'NoSuchElementError') {
+                errorHandler(err);
+                break;
+            } else{
+                throw err;
+            }
+        }
+        await(driver.wait(until.stalenessOf(content), config.waitElementTimeout));
 
     }
-	finally{
-		db.emitter.emit('save data list', imagesList);
-        imagesList = [];
-        console.log('end of crawling');
-        console.timeEnd('grab image links');
-	}
+
+    db.emitter.emit('save data list', imagesList);
+    imagesList = [];
+    console.log('end of crawling');
+    console.timeEnd('grab image links');
 });
 
 
@@ -111,10 +104,9 @@ function errorHandler(err){
 
 module.exports.grabPage = async(function (driver, url, needCount) {
 
-        console.time('grab image links');
-        driver.get(url);
-
-        await(driver.wait(until.elementLocated(By.css(config.cssSelectors.content)), config.waitElementTimeout));
-        await(driver.findElement(By.css(config.cssSelectors.content)).click());
-        await(grabInfo(driver, url, needCount));
+    console.time('grab image links');
+    await(driver.get(url));
+    await(driver.wait(until.elementLocated(By.css(config.cssSelectors.content)), config.waitElementTimeout));
+    await(driver.findElement(By.css(config.cssSelectors.content)).click());
+    await(grabInfo(driver, url, needCount));
 });

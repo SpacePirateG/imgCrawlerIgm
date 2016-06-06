@@ -40,7 +40,7 @@ module.exports.nextProfile = function() {
 module.exports.profileDone = function(profile){
     return new Promise(function (resolve, reject) {
         console.log(JSON.stringify(profile, null, 4));
-        Profile.update({_id: profile._id}, {state: states.done}, function (err) {
+        Profile.update({_id: profile._id}, { state: states.done }, function (err) {
             if (err)
             {
                 reject(err);
