@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
-var imageSchema = mongoose.Schema({
+var imageSchema = Schema({
     data: {
         type: String,
         index: false,
@@ -20,12 +21,8 @@ var imageSchema = mongoose.Schema({
                         required: true
                     },
                     desc: String,
-                    type: {
-                        type: String,
-                        required: true
-                    },
                     value: {
-                        type: String,
+                        type: Schema.Types.Mixed,
                         required: true
                     }
                 }

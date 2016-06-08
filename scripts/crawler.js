@@ -15,20 +15,28 @@ var config = require('../config.js');
 
 
 function getImageObject(imageData, likes, profile){
-    var likesObj = config.module.likes;
-    var profileObj = config.module.profile;
-    likesObj.value = likes;
-    profileObj.value = profile;
-
+    var likesObj = {
+        name: "likes",
+        value: likes
+    };
+    var profileObj = {
+        name: "profile",
+        value: profile
+    };
+    var timestampObj = {
+        name: "timestamp",
+        value: new Date()
+    };
 
     return {
         data: imageData.toString('base64'),
         info: [
             {
-                module: config.module.name,
+                module: config.moduleName,
                 properties: [
                     likesObj,
-                    profileObj
+                    profileObj,
+                    timestampObj
                 ]
             }
         ]

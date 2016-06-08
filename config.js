@@ -28,19 +28,9 @@ module.exports = {
         lock: 'LOCK',
         done: 'DONE'
     },
-    module: {
-        name: 'crawler',
-        likes: {
-            name: 'likes',
-            //desc: 'count likes in image',
-            type: 'INT'
-        },
-        profile: {
-            name: 'profile',
-            //desc: 'profile name',
-            type: 'STRING'
-        }
-    },
+    moduleName: 'crawler',
+
+
 
     hostDB: 'mongodb://localhost/work'
 };

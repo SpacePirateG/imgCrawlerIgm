@@ -14,22 +14,26 @@ profile.setPreference("thatoneguydotnet.QuickJava.curVersion", "2.0.7");
 profile.setPreference("thatoneguydotnet.QuickJava.startupStatus.Images", 2);
 
 var options = new firefox.Options().setProfile(profile);
-var driver = new firefox.Driver(options);
-driver.manage().timeouts().setScriptTimeout(config.waitScriptTimeout);
-driver.manage().window().setSize(800, 600);
 
-
+function createDriver(){
+    var driver = new firefox.Driver(options);
+    driver.manage().timeouts().setScriptTimeout(config.waitScriptTimeout);
+    driver.manage().window().setSize(800, 600);
+    return driver;
+}
 
 var run = async(function iteration(){
+    console.log('iteration');
     var profile = await(db.nextProfile());
     if(!profile) {
-        setTimeout(async(iteration), 1000);
+        setTimeout(run, 1000);
         return;
     }
-
+    var driver = createDriver();
     try {
         await(crawler.grabPage(driver, profile.url, config.countContent));
         await(db.profileDone(profile));
+        driver.quit();
         run();
     }
     catch(err){
