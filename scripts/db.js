@@ -10,7 +10,6 @@ var Image = require('../model/image.js');
 
 var states = config.profileStates;
 
-
 const dbEmmiter = new EventEmiter();
 dbEmmiter.on('save data list', function(dataList){
     _.each(dataList, function(image){
@@ -37,10 +36,10 @@ module.exports.nextProfile = function() {
     })
 };
 
-module.exports.profileDone = function(profile){
+module.exports.profileChangeState = function(profile, state){
     return new Promise(function (resolve, reject) {
         console.log(JSON.stringify(profile, null, 4));
-        Profile.update({_id: profile._id}, { state: states.done }, function (err) {
+        Profile.update({_id: profile._id}, { state: state }, function (err) {
             if (err)
             {
                 reject(err);
@@ -51,4 +50,18 @@ module.exports.profileDone = function(profile){
         })
     })
 
+};
+
+module.exports.removeAllImages = function(profile){
+    return new Promise(function(resolve, reject){
+        Image.remove({'info.0.properties.1.value': profile.url}, function(err){
+            if (err)
+            {
+                reject(err);
+                return;
+            }
+
+            resolve();
+        })
+    })
 };

@@ -6,6 +6,8 @@ var mongoose = require('mongoose');
 var async = require('asyncawait/async');
 var await = require('asyncawait/await');
 
+var states = config.profileStates;
+
 var pathToQuickjava = __dirname + '/extensions/quickjava-2.0.7-fx.xpi';
 
 var profile = new firefox.Profile();
@@ -32,12 +34,14 @@ var run = async(function iteration(){
     var driver = createDriver();
     try {
         await(crawler.grabPage(driver, profile.url, config.countContent));
-        await(db.profileDone(profile));
+        await(db.profileChangeState(profile, states.done));
         driver.quit();
         run();
     }
     catch(err){
-        console.log("main [error]: ",err)
+        console.log("main [error]: ",err);
+        await(db.removeAllImages(profile));
+        await(db.profileChangeState(profile, states.free));
         driver.quit();
         process.exit();
     }
