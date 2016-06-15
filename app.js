@@ -25,7 +25,6 @@ function createDriver(){
 }
 
 var run = async(function iteration(){
-    console.log('iteration');
     var profile = await(db.nextProfile());
     if(!profile) {
         setTimeout(run, 1000);
@@ -35,16 +34,16 @@ var run = async(function iteration(){
     try {
         await(crawler.grabPage(driver, profile.url, config.countContent));
         await(db.profileChangeState(profile, states.done));
-        driver.quit();
-        run();
     }
     catch(err){
         console.log("main [error]: ",err);
-        await(db.removeAllImages(profile));
-        await(db.profileChangeState(profile, states.free));
-        driver.quit();
-        process.exit();
+        //await(db.removeAllImages(profile));
+        //await(db.profileChangeState(profile, states.free));
     }
+	finally{
+		driver.quit();
+        run();
+	}
 
 });
 
